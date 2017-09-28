@@ -1,4 +1,5 @@
 require "httparty"
+require "json"
 
 class Kele
     include HTTParty
@@ -9,6 +10,11 @@ class Kele
             now[:alert] = "There was an error creating your username or password."
         end
         
+    end
+    
+    def get_me
+        response = self.class.get(base_api_endpoint("users/me"), headers: { "authorization" => @auth_token })
+        @user_data = JSON.parse(response.body)
     end
 
     private
