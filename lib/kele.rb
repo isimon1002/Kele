@@ -24,6 +24,28 @@ class Kele
         response = self.class.get(base_api_endpoint("mentors/#{mentor_id}/student_availability"), headers: { "authorization" => @auth_token })
         @mentor_availability = [response.body]
     end
+    
+    def get_messages(*page)
+        if page.empty?
+            x = 1
+            @messages = []
+            response = self.class.get(base_api_endpoint("message_threads"), headers: { "authorization" => @auth_token })
+            while x <= response.count
+                @messages.push(self.class.get(base_api_endpoint("message_threads?page=#{x}"), headers: { "authorization" => @auth_token }))
+                x += 1
+            end
+        puts @messages
+            
+        else
+            response = self.class.get(base_api_endpoint("message_threads?page=#{page.join}"), headers: { "authorization" => @auth_token })
+            @messages = [response.body]
+            
+        end
+    end
+    
+    def create_message(sender, recipient_id, token, subject, body)
+        self.class.post(base_api_endpoint("messages"), headers: { "authorization" => @auth_token }, body: {sender: sender, recipient_id: recipient_id, token: token, subject: subject, body: body})
+    end
 
     private
     
