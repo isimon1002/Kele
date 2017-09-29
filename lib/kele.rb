@@ -46,6 +46,10 @@ class Kele
     def create_message(sender, recipient_id, token, subject, body)
         self.class.post(base_api_endpoint("messages"), headers: { "authorization" => @auth_token }, body: {sender: sender, recipient_id: recipient_id, token: token, subject: subject, body: body})
     end
+    
+    def create_submission(assignment_branch, assignment_commit_link, checkpoint_id, comment, enrollment_id)
+        self.class.post(base_api_endpoint("checkpoint_submissions"), headers: { "authorization" => @auth_token }, body: {assignment_branch: assignment_branch, assignment_commit_link: assignment_commit_link, checkpoint_id: checkpoint_id, comment: comment, enrollment_id: enrollment_id})
+    end
 
     private
     
